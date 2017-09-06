@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>SimpleTokenProvider</id>
-    <version>1.0.0</version>
+    <id>ExoftSecurityOAuth0</id>
+    <version>1.0.1</version>
     <authors>exoft</authors>
     <owners>exoft</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -20,6 +20,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\bin\Debug\netstandard1.4\ExoftSecurityOAuth0.dll" target="lib\netstandard1.4\ExoftSecurityOAuth0.dll" />
+    <file src="C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\bin\Release\netstandard1.4\ExoftSecurityOAuth0.dll" target="lib\netstandard1.4\ExoftSecurityOAuth0.dll" />
   </files>
 </package>

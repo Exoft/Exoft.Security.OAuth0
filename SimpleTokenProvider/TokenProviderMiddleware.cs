@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace SimpleTokenProvider
+namespace ExoftSecurityOAuth0
 {
     /// <summary>
     /// Token generator middleware component which is added to an HTTP pipeline.
@@ -95,12 +95,15 @@ namespace SimpleTokenProvider
                 notBefore: now,
                 expires: now.Add(_options.Expiration),
                 signingCredentials: _options.SigningCredentials);
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                var refreshToken = Guid.NewGuid().ToString().Replace("-", "");
+
 
             var response = new
             {
                 access_token = encodedJwt,
-                expires_in = (int)_options.Expiration.TotalSeconds
+                expires_in = (int)_options.Expiration.TotalSeconds,
+                refresh_token = refreshToken
             };
 
             // Serialize and return the response

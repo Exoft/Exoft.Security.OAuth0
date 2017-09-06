@@ -5198,7 +5198,7 @@
     "C:\\Users\\8cham\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "restoreSettings": {
       "hideWarningsAndErrors": true
     },
@@ -5218,7 +5218,8 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0": {},
+        "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider\\bin\\Release": {},
+        "C:\\Users\\8cham\\Desktop\\nugetOauth": {},
         "http://packagesource": {},
         "https://api.nuget.org/v3/index.json": {}
       },

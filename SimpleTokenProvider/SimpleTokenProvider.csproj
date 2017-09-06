@@ -5,12 +5,13 @@
     <Authors>exoft</Authors>
     <TargetFramework>netstandard1.4</TargetFramework>
     <AssemblyName>ExoftSecurityOAuth0</AssemblyName>
-    <PackageId>SimpleTokenProvider</PackageId>
+    <PackageId>ExoftSecurityOAuth0</PackageId>
     <PackageTags>token;authentication;security;jwt</PackageTags>
     <ApplicationIcon>Favicon_64х64.ico</ApplicationIcon>
     <Company>exoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RootNamespace>ExoftSecurityOAuth0</RootNamespace>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
