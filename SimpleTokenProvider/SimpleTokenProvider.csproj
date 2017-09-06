@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <Description>Simple authentication token provider for ASP.NET Core.</Description>
-    <Authors>Nate Barbettini</Authors>
+    <Authors>exoft</Authors>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <AssemblyName>SimpleTokenProvider</AssemblyName>
+    <AssemblyName>ExoftSecurityOAuth0</AssemblyName>
     <PackageId>SimpleTokenProvider</PackageId>
     <PackageTags>token;authentication;security;jwt</PackageTags>
+    <ApplicationIcon>Favicon_64х64.ico</ApplicationIcon>
+    <Company>exoft</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>ExoftSecurityOAuth0</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

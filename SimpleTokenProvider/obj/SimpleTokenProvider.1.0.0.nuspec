@@ -3,8 +3,8 @@
   <metadata>
     <id>SimpleTokenProvider</id>
     <version>1.0.0</version>
-    <authors>Nate Barbettini</authors>
-    <owners>Nate Barbettini</owners>
+    <authors>exoft</authors>
+    <owners>exoft</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple authentication token provider for ASP.NET Core.</description>
     <tags>token authentication security jwt</tags>
@@ -20,6 +20,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\bin\Debug\netstandard1.4\SimpleTokenProvider.dll" target="lib\netstandard1.4\SimpleTokenProvider.dll" />
+    <file src="C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\bin\Debug\netstandard1.4\ExoftSecurityOAuth0.dll" target="lib\netstandard1.4\ExoftSecurityOAuth0.dll" />
   </files>
 </package>
