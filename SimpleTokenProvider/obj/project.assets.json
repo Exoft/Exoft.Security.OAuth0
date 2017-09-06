@@ -379,9 +379,6 @@
           "lib/netstandard1.0/Newtonsoft.Json.dll": {}
         }
       },
-      "NuGet.exe/3.4.3": {
-        "type": "package"
-      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -1809,17 +1806,6 @@
         "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.xml",
         "tools/install.ps1"
-      ]
-    },
-    "NuGet.exe/3.4.3": {
-      "sha512": "8H39qmux/JD7OPFtvDqbTW/rJlJSZBXVVNktDCZ3xAUfsRK6DfwadkQxhey1wRtsHhW4UyLsOLkZcpOA9jJRKg==",
-      "type": "package",
-      "path": "nuget.exe/3.4.3",
-      "files": [
-        "build/native/NuGet.exe",
-        "build/native/NuGet.exe.props",
-        "nuget.exe.3.4.3.nupkg.sha512",
-        "nuget.exe.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -5205,7 +5191,6 @@
       "Microsoft.Extensions.Logging >= 1.1.1",
       "Microsoft.Extensions.Options >= 1.1.1",
       "NETStandard.Library >= 1.6.1",
-      "NuGet.exe >= 3.4.3",
       "System.IdentityModel.Tokens.Jwt >= 5.1.3"
     ]
   },
@@ -5233,6 +5218,8 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0": {},
+        "http://packagesource": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5256,10 +5243,6 @@
             "target": "Package",
             "version": "1.6.1",
             "autoReferenced": true
-          },
-          "NuGet.exe": {
-            "target": "Package",
-            "version": "3.4.3"
           },
           "Microsoft.Extensions.Options": {
             "target": "Package",
