@@ -5203,11 +5203,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider\\SimpleTokenProvider.csproj",
+      "projectUniqueName": "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider - nuget\\SimpleTokenProvider\\SimpleTokenProvider.csproj",
       "projectName": "SimpleTokenProvider",
-      "projectPath": "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider\\SimpleTokenProvider.csproj",
+      "projectPath": "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider - nuget\\SimpleTokenProvider\\SimpleTokenProvider.csproj",
       "packagesPath": "C:\\Users\\8cham\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider\\obj\\",
+      "outputPath": "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider - nuget\\SimpleTokenProvider\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\8cham\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5218,8 +5218,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider\\bin\\Release": {},
-        "C:\\Users\\8cham\\Desktop\\nugetOauth": {},
+        "C:\\Users\\8cham\\Desktop\\ExoftOAuth0\\Exoft.Security.OAuth0\\SimpleTokenProvider - nuget\\SimpleTokenProvider\\bin\\Release": {},
         "http://packagesource": {},
         "https://api.nuget.org/v3/index.json": {}
       },

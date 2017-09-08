@@ -1,0 +1,8 @@
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\bin\Debug\netstandard1.4\ExoftSecurityOAuth0.deps.json
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\bin\Debug\netstandard1.4\ExoftSecurityOAuth0.dll
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\bin\Debug\netstandard1.4\ExoftSecurityOAuth0.pdb
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\obj\Debug\netstandard1.4\SimpleTokenProvider.csprojResolveAssemblyReference.cache
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\obj\Debug\netstandard1.4\SimpleTokenProvider.csproj.CoreCompileInputs.cache
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\obj\Debug\netstandard1.4\SimpleTokenProvider.AssemblyInfo.cs
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\obj\Debug\netstandard1.4\ExoftSecurityOAuth0.dll
+C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider - nuget\SimpleTokenProvider\obj\Debug\netstandard1.4\ExoftSecurityOAuth0.pdb
