@@ -88,17 +88,28 @@ namespace SimpleTokenProvider
             await context.Response.WriteAsync("Bad request.");
         }
 
-
+        //scenario 1 ： get the access-token by username and password
         private async Task GenerateToken(HttpContext context)
         {
             var username = context.Request.Form["username"];
             var password = context.Request.Form["password"];
+            var clientId = context.Request.Form["client_id"];
+            var clientSecret = context.Request.Form["client_secret"];
 
             var identity = await _options.IdentityResolver(username, password);
             if (identity == null)
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Invalid username or password.");
+                return;
+            }
+
+            //validate the client_id/client_secret                                  
+            var isClientValidated = _options.ValidateClientResolver(clientId, clientSecret);
+            if (!isClientValidated)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync("Invalid client infomation.");
                 return;
             }
 
@@ -135,13 +146,15 @@ namespace SimpleTokenProvider
             await WriteTokenResponse(context, jwt, jwtRefreshToken);
         }
 
-
+        //scenario 2 ： get the access_token by refresh_token
         private async Task IssueRefreshedToken(HttpContext context)
         {
             try
             {
                 var rToken = context.Request.Form["refresh_token"].ToString();
-                var token = _options.GetRefreshTokenResolver(new RefreshTokenDto() {RefreshToken = rToken});
+                var clientId = context.Request.Form["client_id"].ToString();
+
+                var token = _options.GetRefreshTokenResolver(new RefreshTokenDto() {RefreshToken = rToken, ClientId = clientId });
 
                 if (token == null)
                 {
@@ -153,20 +166,16 @@ namespace SimpleTokenProvider
                 }
 
 
-                var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
 
                 // validate token using validation parameters
 
-
-
-
-
                 var now = DateTime.UtcNow;
 
+                var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
 
                 var refreshToken = jwtSecurityTokenHandler.ReadToken(rToken);
 
-                if (now> refreshToken.ValidTo)
+                if (now > refreshToken.ValidTo)
                 {
                     var response = new { error = "Refresh token has been expired." };
                     context.Response.StatusCode = 400;
@@ -174,7 +183,6 @@ namespace SimpleTokenProvider
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
                     return;
                 }
-
 
 
                 // create a new token based on original one 
@@ -264,11 +272,14 @@ namespace SimpleTokenProvider
         {
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             var encodedRefreshJwt = new JwtSecurityTokenHandler().WriteToken(jwtRefreshToken);
+            var clientId = context.Request.Form["client_id"];
+
 
             _options.AddRefreshTokenResolver(new RefreshTokenDto
             {
                 RefreshToken = encodedRefreshJwt,
-                ExpirationRefreshToken = jwtRefreshToken.ValidTo
+                ExpirationRefreshToken = jwtRefreshToken.ValidTo,
+                ClientId = clientId
             });
 
             var response = new

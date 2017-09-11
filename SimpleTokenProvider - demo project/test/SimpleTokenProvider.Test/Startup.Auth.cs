@@ -59,7 +59,8 @@ namespace SimpleTokenProvider.Test
                 ExpirationAccessToken = TimeSpan.FromMinutes(0.5),
                 ExpirationRefreshToken = TimeSpan.FromMinutes(1),
                 GetRefreshTokenResolver = (options) => GetRefreshToken(options, db),
-                AddRefreshTokenResolver = (options) => AddRefreshToken(options, db)
+                AddRefreshTokenResolver = (options) => AddRefreshToken(options, db),
+                ValidateClientResolver = (clientId, clientSecret) => ValidateClient(clientId, clientSecret, db)
             }, tokenValidationParameters);
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions
@@ -92,12 +93,24 @@ namespace SimpleTokenProvider.Test
             return Task.FromResult<ClaimsIdentity>(null);
         }
 
+        private bool ValidateClient(string clientId, string clientSecret, DemoDb dbContext)
+        {
+            /* Validated client_id/client_secret
+             * 
+             * var isValidated = dbContext.Users.Any(x => x.ClientId && x.ClientSecret == clientSecret);
+             *
+             * return isValidated;
+             */
+            return true;
+        }
+
         private bool AddRefreshToken(RefreshTokenDto options, DemoDb dbContext)
         {
             dbContext.Add(new RefreshToken()
             {
                 ExpirationRefreshToken = options.ExpirationRefreshToken,
-                Token = options.RefreshToken
+                Token = options.RefreshToken,
+                ClientId = options.ClientId
             });
 
             return dbContext.SaveChanges() > 0;
@@ -105,7 +118,15 @@ namespace SimpleTokenProvider.Test
 
         private RefreshTokenDto GetRefreshToken(RefreshTokenDto options, DemoDb dbContext)
         {
-            var token = dbContext.RefreshTokens.FirstOrDefault(x => x.Token == options.RefreshToken);
+            RefreshToken token;
+            if (!string.IsNullOrEmpty(options.ClientId))
+            {
+                 token = dbContext.RefreshTokens.FirstOrDefault(x => x.Token == options.RefreshToken && x.ClientId == options.ClientId);
+            }
+            else
+            {
+                 token = dbContext.RefreshTokens.FirstOrDefault(x => x.Token == options.RefreshToken);
+            }
 
             if (token != null)
             {

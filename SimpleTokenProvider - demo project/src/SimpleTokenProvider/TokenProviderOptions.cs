@@ -80,5 +80,10 @@ namespace SimpleTokenProvider
         /// </summary>
         public Func<RefreshTokenDto, bool> AddRefreshTokenResolver { get; set; }
 
+        /// <summary>
+        /// Validate the client_id/client_secret
+        /// </summary>
+        public Func<string, string, bool> ValidateClientResolver { get; set; }
+
     }
 }

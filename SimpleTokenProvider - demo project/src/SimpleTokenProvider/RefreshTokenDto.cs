@@ -6,7 +6,7 @@ namespace SimpleTokenProvider
 {
     public class RefreshTokenDto
     {
-        public int Id { get; set; }
+        public string ClientId { get; set; }
 
         public string RefreshToken { get; set; }
 

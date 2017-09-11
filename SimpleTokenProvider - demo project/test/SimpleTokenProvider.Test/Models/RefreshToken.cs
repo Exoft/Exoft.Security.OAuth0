@@ -14,6 +14,8 @@ namespace SimpleTokenProvider.Test.Models
 
         public string Token { get; set; }
 
+        public string ClientId { get; set; }
+
         public DateTime ExpirationRefreshToken { get; set; }
     }
 }
