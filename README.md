@@ -4,6 +4,7 @@
 #### Get access token:
 
  Request method: POST
+ 
  Url: app_url/token
 
  Parameters:
@@ -26,6 +27,7 @@ Response:
 #### Refresh access token:
 
  Request method: POST
+ 
  Url: app_url/token
 
 Parameters:
