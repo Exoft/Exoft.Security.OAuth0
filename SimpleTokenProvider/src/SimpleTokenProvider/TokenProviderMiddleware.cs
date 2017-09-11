@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,22 +28,17 @@ namespace SimpleTokenProvider
         private readonly TokenProviderOptions _options;
         private readonly ILogger _logger;
         private readonly JsonSerializerSettings _serializerSettings;
-        private readonly TokenValidationParameters _tokenValidationParameters;
 
         public TokenProviderMiddleware(
             RequestDelegate next,
             IOptions<TokenProviderOptions> options,
-            ILoggerFactory loggerFactory, TokenValidationParameters tokenValidationParameters)
+            ILoggerFactory loggerFactory)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<TokenProviderMiddleware>();
-            _tokenValidationParameters = tokenValidationParameters;
             _options = options.Value;
 
-            if (tokenValidationParameters == null)
-            {
-                throw new ArgumentNullException(nameof(tokenValidationParameters));
-            }
+
             ThrowIfInvalidOptions(_options);
 
             _serializerSettings = new JsonSerializerSettings
@@ -59,7 +55,6 @@ namespace SimpleTokenProvider
                 await _next(context);
                 return;
             }
-
 
             // Request must be POST with Content-Type: application/x-www-form-urlencoded
             if (!context.Request.Method.Equals("POST")
@@ -83,12 +78,15 @@ namespace SimpleTokenProvider
                 return;
             }
 
-            //return GenerateToken(context);
             context.Response.StatusCode = 400;
             await context.Response.WriteAsync("Bad request.");
         }
 
-        //scenario 1 ： get the access-token by username and password
+        /// <summary>
+        /// Get the access-token by username and password (Scenario 1)
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private async Task GenerateToken(HttpContext context)
         {
             var username = context.Request.Form["username"];
@@ -126,34 +124,23 @@ namespace SimpleTokenProvider
 
             claims.AddRange(identity.Claims);
 
-            // Create the access token 
-            var jwt = new JwtSecurityToken(
-                issuer: _options.Issuer,
-                audience: _options.Audience,
-                claims: claims,
-                notBefore: now,
-                expires: now.Add(_options.ExpirationAccessToken),
-                signingCredentials: _options.SigningCredentials);
+            var tokens = GetJwtTokens(claims);
 
-            // Create the refresh token 
-            var jwtRefreshToken = new JwtSecurityToken(
-                claims: claims,
-                notBefore: now,
-                expires: now.Add(_options.ExpirationRefreshToken),
-                signingCredentials: _options.SigningRTokenCredentials);
+            await WriteTokenResponse(context, tokens[0], tokens[1]);
 
-
-            await WriteTokenResponse(context, jwt, jwtRefreshToken);
         }
 
-        //scenario 2 ： get the access_token by refresh_token
+        /// <summary>
+        /// Get the access_token by refresh_token (Scenario 2)
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private async Task IssueRefreshedToken(HttpContext context)
         {
             try
             {
                 var rToken = context.Request.Form["refresh_token"].ToString();
                 var clientId = context.Request.Form["client_id"].ToString();
-
                 var token = _options.GetRefreshTokenResolver(new RefreshTokenDto() {RefreshToken = rToken, ClientId = clientId });
 
                 if (token == null)
@@ -165,16 +152,11 @@ namespace SimpleTokenProvider
                     return;
                 }
 
-
-
-                // validate token using validation parameters
-
                 var now = DateTime.UtcNow;
-
                 var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-
                 var refreshToken = jwtSecurityTokenHandler.ReadToken(rToken);
 
+                // validate token
                 if (now > refreshToken.ValidTo)
                 {
                     var response = new { error = "Refresh token has been expired." };
@@ -184,27 +166,10 @@ namespace SimpleTokenProvider
                     return;
                 }
 
+                var claims = ((JwtSecurityToken) refreshToken).Claims;
+                var tokens = GetJwtTokens(claims);
 
-                // create a new token based on original one 
-                // apply new expiration
-                var jwt = new JwtSecurityToken(
-                    issuer: _options.Issuer,
-                    audience: _options.Audience,
-                    claims: ((JwtSecurityToken)refreshToken).Claims,
-                    notBefore: now,
-                    expires: now.Add(_options.ExpirationAccessToken),
-                    signingCredentials: _options.SigningCredentials);
-
-
-                // Create the refresh token 
-                var jwtRefreshToken = new JwtSecurityToken(
-                    claims: ((JwtSecurityToken)refreshToken).Claims,
-                    notBefore: now,
-                    expires: now.Add(_options.ExpirationRefreshToken),
-                    signingCredentials: _options.SigningRTokenCredentials);
-
-
-                await WriteTokenResponse(context, jwt, jwtRefreshToken);
+                await WriteTokenResponse(context, tokens[0], tokens[1]);
                 return;
             }
             catch (Exception ex)
@@ -217,6 +182,71 @@ namespace SimpleTokenProvider
             }
         }
 
+        /// <summary>
+        /// Returns access_token data and store refresh token using delegate
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="jwt"></param>
+        /// <param name="jwtRefreshToken"></param>
+        /// <returns></returns>
+        private async Task WriteTokenResponse(HttpContext context, JwtSecurityToken jwt, JwtSecurityToken jwtRefreshToken)
+        {
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var encodedRefreshJwt = new JwtSecurityTokenHandler().WriteToken(jwtRefreshToken);
+            var clientId = context.Request.Form["client_id"];
+
+            _options.AddRefreshTokenResolver(new RefreshTokenDto
+            {
+                RefreshToken = encodedRefreshJwt,
+                ExpirationRefreshToken = jwtRefreshToken.ValidTo,
+                ClientId = clientId
+            });
+
+            var response = new
+            {
+                access_token = encodedJwt,
+                token_type = "bearer",
+                expires_in = (int)_options.ExpirationAccessToken.TotalSeconds,
+                refresh_token = encodedRefreshJwt
+                // refresh_token_expires_in = (int)_options.ExpirationRefreshToken.TotalSeconds,
+            };
+
+            // Serialize and return the response
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
+        }
+
+        /// <summary>
+        /// Generate access_token and refresh_token
+        /// </summary>
+        /// <param name="claims"></param>
+        /// <returns>Array with access_token and refresh_token</returns>
+        private JwtSecurityToken[] GetJwtTokens(IEnumerable<Claim> claims)
+        {
+            if(claims!=null && !claims.Any()) return null;
+
+            var now = DateTime.UtcNow;
+
+            // Create the access token 
+            var jwt = new JwtSecurityToken(
+                issuer: _options.Issuer,
+                audience: _options.Audience,
+                claims: claims,
+                notBefore: now,
+                expires: now.Add(_options.ExpirationAccessToken),
+                signingCredentials: _options.SigningCredentials);
+
+
+            // Create the refresh token 
+            var jwtRefreshToken = new JwtSecurityToken(
+                claims: claims,
+                notBefore: now,
+                expires: now.Add(_options.ExpirationRefreshToken),
+                signingCredentials: _options.SigningRTokenCredentials);
+
+            return new [] {jwt, jwtRefreshToken};
+
+        }
 
         private static void ThrowIfInvalidOptions(TokenProviderOptions options)
         {
@@ -255,6 +285,11 @@ namespace SimpleTokenProvider
                 throw new ArgumentNullException(nameof(TokenProviderOptions.SigningCredentials));
             }
 
+            if (options.SigningRTokenCredentials == null)
+            {
+                throw new ArgumentNullException(nameof(TokenProviderOptions.SigningRTokenCredentials));
+            }
+
             if (options.NonceGenerator == null)
             {
                 throw new ArgumentNullException(nameof(TokenProviderOptions.NonceGenerator));
@@ -267,33 +302,5 @@ namespace SimpleTokenProvider
         /// <param name="date">The date to convert.</param>
         /// <returns>Seconds since Unix epoch.</returns>
         public static long ToUnixEpochDate(DateTime date) => new DateTimeOffset(date).ToUniversalTime().ToUnixTimeSeconds();
-
-        private async Task WriteTokenResponse(HttpContext context, JwtSecurityToken jwt, JwtSecurityToken jwtRefreshToken)
-        {
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            var encodedRefreshJwt = new JwtSecurityTokenHandler().WriteToken(jwtRefreshToken);
-            var clientId = context.Request.Form["client_id"];
-
-
-            _options.AddRefreshTokenResolver(new RefreshTokenDto
-            {
-                RefreshToken = encodedRefreshJwt,
-                ExpirationRefreshToken = jwtRefreshToken.ValidTo,
-                ClientId = clientId
-            });
-
-            var response = new
-            {
-                access_token = encodedJwt,
-                token_type = "bearer",
-                expires_in = (int) _options.ExpirationAccessToken.TotalSeconds,
-                refresh_token = encodedRefreshJwt
-               // refresh_token_expires_in = (int)_options.ExpirationRefreshToken.TotalSeconds,
-            };
-
-            // Serialize and return the response
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
-        }
     }
 }

@@ -13,6 +13,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Product>ExoftSecurityOAuth0</Product>
     <ApplicationIcon>Favicon_64х64.ico</ApplicationIcon>
+    <Version>1.1.1</Version>
+    <PackageProjectUrl>https://github.com/Exoft/Exoft.Security.OAuth0.Sample</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
