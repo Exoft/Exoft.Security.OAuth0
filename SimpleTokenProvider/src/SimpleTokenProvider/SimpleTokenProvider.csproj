@@ -1,28 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Simple authentication token provider for ASP.NET Core</Description>
-    <Authors>exoft</Authors>
-    <TargetFramework>netstandard1.4</TargetFramework>
-    <AssemblyName>SimpleTokenProvider</AssemblyName>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Version>2.0.0</Version>
     <PackageId>ExoftSecurityOAuth0</PackageId>
-    <PackageTags>token;authentication;security;jwt</PackageTags>
+    <Authors>exoft</Authors>
     <Company>exoft</Company>
+    <Product>ExoftSecurityOAuth0</Product>
+    <Description>Simple authentication token provider for ASP.NET Core</Description>
+    <PackageProjectUrl>https://github.com/Exoft/Exoft.Security.OAuth0.Sample</PackageProjectUrl>
     <PackageIconUrl>http://exoft.net/wp-content/uploads/2016/09/Favicon_64х64.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/Exoft/Exoft.Security.OAuth0</RepositoryUrl>
+    <RepositoryType />
+    <PackageTags>token;authentication;security;jwt</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Product>ExoftSecurityOAuth0</Product>
-    <ApplicationIcon>Favicon_64х64.ico</ApplicationIcon>
-    <Version>1.1.1</Version>
-    <PackageProjectUrl>https://github.com/Exoft/Exoft.Security.OAuth0.Sample</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.4" />
   </ItemGroup>
 
 </Project>

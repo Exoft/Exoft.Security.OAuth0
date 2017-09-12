@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ExoftSecurityOAuth0</id>
+    <version>2.0.0</version>
+    <authors>exoft</authors>
+    <owners>exoft</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/Exoft/Exoft.Security.OAuth0.Sample</projectUrl>
+    <iconUrl>http://exoft.net/wp-content/uploads/2016/09/Favicon_64х64.png</iconUrl>
+    <description>Simple authentication token provider for ASP.NET Core</description>
+    <tags>token authentication security jwt</tags>
+    <repository url="https://github.com/Exoft/Exoft.Security.OAuth0" />
+    <dependencies>
+      <group targetFramework=".NETCoreApp2.0">
+        <dependency id="System.IdentityModel.Tokens.Jwt" version="5.1.4" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Options" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\bin\Release\netcoreapp2.0\SimpleTokenProvider.dll" target="lib\netcoreapp2.0\SimpleTokenProvider.dll" />
+  </files>
+</package>

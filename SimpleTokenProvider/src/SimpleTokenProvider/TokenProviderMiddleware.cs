@@ -74,7 +74,12 @@ namespace SimpleTokenProvider
             }
             else if (context.Request.Form["grant_type"] == "refresh_token")
             {
-                await IssueRefreshedToken(context); 
+                await IssueRefreshedToken(context);
+                return;
+            }
+            else if (context.Request.Form["grant_type"] == "client_credentials")
+            {
+                await GeClientCredentialsGrant(context);
                 return;
             }
 
@@ -107,7 +112,7 @@ namespace SimpleTokenProvider
             if (!isClientValidated)
             {
                 context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Invalid client infomation.");
+                await context.Response.WriteAsync("Invalid client information.");
                 return;
             }
 
@@ -127,7 +132,6 @@ namespace SimpleTokenProvider
             var tokens = GetJwtTokens(claims);
 
             await WriteTokenResponse(context, tokens[0], tokens[1]);
-
         }
 
         /// <summary>
@@ -141,11 +145,11 @@ namespace SimpleTokenProvider
             {
                 var rToken = context.Request.Form["refresh_token"].ToString();
                 var clientId = context.Request.Form["client_id"].ToString();
-                var token = _options.GetRefreshTokenResolver(new RefreshTokenDto() {RefreshToken = rToken, ClientId = clientId });
+                var token = _options.GetRefreshTokenResolver(new RefreshTokenDto() { RefreshToken = rToken, ClientId = clientId });
 
                 if (token == null)
                 {
-                    var response = new {error = "Can not refresh token"};
+                    var response = new { error = "Can not refresh token" };
                     context.Response.StatusCode = 400;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
@@ -166,7 +170,7 @@ namespace SimpleTokenProvider
                     return;
                 }
 
-                var claims = ((JwtSecurityToken) refreshToken).Claims;
+                var claims = ((JwtSecurityToken)refreshToken).Claims;
                 var tokens = GetJwtTokens(claims);
 
                 await WriteTokenResponse(context, tokens[0], tokens[1]);
@@ -174,13 +178,67 @@ namespace SimpleTokenProvider
             }
             catch (Exception ex)
             {
-                var response = new {error = "Bad request or invalid token."};
+                var response = new { error = "Bad request or invalid token." };
                 context.Response.StatusCode = 400;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
                 return;
             }
         }
+
+        /// <summary>
+        /// This grant is suitable for machine-to-machine authentication where a specific user’s permission to access data is not required.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private async Task GeClientCredentialsGrant(HttpContext context)
+        {
+            var clientId = context.Request.Form["client_id"];
+            var clientSecret = context.Request.Form["client_secret"];
+
+            //validate the client_id/client_secret                                  
+            var isClientValidated = _options.ValidateClientResolver(clientId, clientSecret);
+            if (!isClientValidated)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync("Invalid client information.");
+                return;
+            }
+
+            var now = DateTime.UtcNow;
+
+            // Specifically add the jti (nonce), iat (issued timestamp), and sub (subject/user) claims.
+            // You can add other claims here, if you want:
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, clientId),
+                new Claim(JwtRegisteredClaimNames.Jti, await _options.NonceGenerator()),
+                new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(now).ToString(), ClaimValueTypes.Integer64)
+            };
+
+
+            var jwt = new JwtSecurityToken(
+                issuer: _options.Issuer,
+                audience: _options.Audience,
+                claims: claims,
+                notBefore: now,
+                expires: now.Add(_options.ExpirationAccessToken),
+                signingCredentials: _options.SigningCredentials);
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            var response = new
+            {
+                token_type = "bearer",
+                expires_in = (int)_options.ExpirationAccessToken.TotalSeconds,
+                access_token = encodedJwt,
+            };
+
+            //Serialize and return the response
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(response, _serializerSettings));
+        }
+
 
         /// <summary>
         /// Returns access_token data and store refresh token using delegate
@@ -223,7 +281,7 @@ namespace SimpleTokenProvider
         /// <returns>Array with access_token and refresh_token</returns>
         private JwtSecurityToken[] GetJwtTokens(IEnumerable<Claim> claims)
         {
-            if(claims!=null && !claims.Any()) return null;
+            if (claims != null && !claims.Any()) return null;
 
             var now = DateTime.UtcNow;
 
@@ -244,7 +302,7 @@ namespace SimpleTokenProvider
                 expires: now.Add(_options.ExpirationRefreshToken),
                 signingCredentials: _options.SigningRTokenCredentials);
 
-            return new [] {jwt, jwtRefreshToken};
+            return new[] { jwt, jwtRefreshToken };
 
         }
 
