@@ -1,8 +1,0 @@
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\bin\Release\netcoreapp2.0\SimpleTokenProvider.deps.json
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\bin\Release\netcoreapp2.0\SimpleTokenProvider.dll
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\bin\Release\netcoreapp2.0\SimpleTokenProvider.pdb
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\obj\Release\netcoreapp2.0\SimpleTokenProvider.csproj.CoreCompileInputs.cache
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\obj\Release\netcoreapp2.0\SimpleTokenProvider.AssemblyInfoInputs.cache
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\obj\Release\netcoreapp2.0\SimpleTokenProvider.AssemblyInfo.cs
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\obj\Release\netcoreapp2.0\SimpleTokenProvider.dll
-C:\Users\8cham\Desktop\ExoftOAuth0\Exoft.Security.OAuth0\SimpleTokenProvider\src\SimpleTokenProvider\obj\Release\netcoreapp2.0\SimpleTokenProvider.pdb
